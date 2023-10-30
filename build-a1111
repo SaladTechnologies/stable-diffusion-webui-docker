@@ -1,0 +1,23 @@
+#! /usr/bin/env bash
+
+set -e pipefail
+
+docker buildx build \
+  -t saladtechnologies/a1111:latest \
+  --platform linux/amd64 \
+  --output type=docker \
+  --provenance false \
+  -f services/AUTOMATIC1111/Dockerfile \
+  services/AUTOMATIC1111
+
+docker push saladtechnologies/a1111:latest
+
+docker buildx build \
+  -t saladtechnologies/a1111:ipv6-latest \
+  --platform linux/amd64 \
+  --output type=docker \
+  --provenance false \
+  -f services/AUTOMATIC1111/Dockerfile.ipv6 \
+  services/AUTOMATIC1111
+
+docker push saladtechnologies/a1111:ipv6-latest
