@@ -62,9 +62,9 @@ shopt -s nullglob
 # For install.py, please refer to https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Developing-extensions#installpy
 list=(./extensions/*/install.py)
 for installscript in "${list[@]}"; do
-  EXTNAME=`echo $installscript | cut -d '/' -f 3`
+  EXTNAME=$(echo $installscript | cut -d '/' -f 3)
   # Skip installing dependencies if extension is disabled in config
-  if `jq -e ".disabled_extensions|any(. == \"$EXTNAME\")" config.json`; then
+  if $(jq -e ".disabled_extensions|any(. == \"$EXTNAME\")" config.json); then
     echo "Skipping disabled extension ($EXTNAME)"
     continue
   fi
