@@ -1,4 +1,4 @@
-FROM saladtechnologies/a1111:base
+FROM saladtechnologies/a1111:latest
 
 RUN apt-get install -y socat
 
