@@ -18,21 +18,21 @@ RUN --mount=type=cache,target=/var/cache/apt \
 
 
 ENV ROOT=/InvokeAI
-RUN git clone https://github.com/invoke-ai/InvokeAI.git ${ROOT}
+ARG RELEASE=v3.3.0post3
+RUN git clone https://github.com/invoke-ai/InvokeAI.git --branch ${RELEASE} ${ROOT}
 WORKDIR ${ROOT}
 
 RUN --mount=type=cache,target=/root/.cache/pip \
-  git reset --hard f3b2e02921927d9317255b1c3811f47bd40a2bf9 && \
-  pip install -e .
-
-
-ARG BRANCH=main SHA=f3b2e02921927d9317255b1c3811f47bd40a2bf9
-RUN --mount=type=cache,target=/root/.cache/pip \
-  git fetch && \
-  git reset --hard && \
-  git checkout ${BRANCH} && \
-  git reset --hard ${SHA} && \
   pip install -U -e .
+
+
+# ARG BRANCH=main SHA=f3b2e02921927d9317255b1c3811f47bd40a2bf9
+# RUN --mount=type=cache,target=/root/.cache/pip \
+#   git fetch && \
+#   git reset --hard && \
+#   git checkout ${BRANCH} && \
+#   git reset --hard ${SHA} && \
+#   pip install -U -e .
 
 RUN --mount=type=cache,target=/root/.cache/pip \
   --mount=type=bind,from=xformers,source=/wheel.whl,target=/xformers-0.0.21-cp310-cp310-linux_x86_64.whl \
@@ -47,7 +47,7 @@ ENV PYTHONUNBUFFERED=1 PRELOAD=false HF_HOME=/root/.cache/huggingface CONFIG_DIR
 EXPOSE 7860
 
 ENTRYPOINT ["/docker/entrypoint.sh"]
-CMD invokeai --web --host 0.0.0.0 --port 7860 --root_dir ${ROOT} --config ${CONFIG_DIR}/models.yaml \
+CMD invokeai --web --host '*' --port 7860 --root_dir ${ROOT} \
   --outdir /output/invoke --embedding_directory /data/embeddings/ --lora_directory /data/models/Lora \
   --no-nsfw_checker --no-safety_checker ${CLI_ARGS}
 

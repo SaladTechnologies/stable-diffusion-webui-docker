@@ -1,12 +1,15 @@
 #! /usr/bin/env bash
 
+release=${1:-v3.3.0post3}
+
 set -e pipefail
 
 docker buildx build \
-  -t saladtechnologies/invoke:latest \
+  -t saladtechnologies/invoke:$release \
   --platform linux/amd64 \
   --output type=docker \
   --provenance false \
+  --build-arg RELEASE=$release \
   -f services/invoke/Dockerfile \
   services/invoke
 
