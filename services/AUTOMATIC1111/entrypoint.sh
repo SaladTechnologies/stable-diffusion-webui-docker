@@ -5,6 +5,10 @@ set -Eeuo pipefail
 # TODO: move all mkdir -p ?
 mkdir -p /data/config/auto/scripts/
 # mount scripts individually
+
+echo $ROOT
+ls -lha $ROOT
+
 find "${ROOT}/scripts/" -maxdepth 1 -type l -delete
 cp -vrfTs /data/config/auto/scripts/ "${ROOT}/scripts/"
 
